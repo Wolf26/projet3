@@ -14,11 +14,14 @@
 	    	$username = $_POST['login'];
 	    	$password = $_POST['pwd'];
 
-	    	$sql = "SELECT * FROM users WHERE username = '$username' ";
+	    	$sql = "SELECT * FROM users WHERE username = ? ";
 	    	$result = $bdd->prepare($sql);
-	    	$result->execute();
+		//passage de $username dans l'array pour validité
+	    	$result->execute(array($username));
+		//compte le nombre de résultats pour username
+		$userExist = $result->rowCunt();
 
-	    	if($result->rowCount() > 0)
+	    	if($userExist > 0)
 	    	{
 	    		$data = $result->fetchAll();
 	    		if (password_verify($password, $data[0]["password"]))
